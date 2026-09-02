@@ -1,6 +1,7 @@
+import type { FormProps } from "../types/types";
 import "./Form.css";
 
-export function Form({ onAddPerson }) {
+export function Form({ onAddPerson }: FormProps) {
   return (
     <form autoComplete="off">
       <label htmlFor="name">Imię</label>
