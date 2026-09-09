@@ -1,7 +1,6 @@
-import type { ListProps } from "../types/types";
 import "./List.css";
 
-export function List({ data }: ListProps) {
+export function List({ data }) {
   return (
     <>
       <h1>Lista osób:</h1>

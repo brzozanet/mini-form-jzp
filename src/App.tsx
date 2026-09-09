@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Form } from "./components/Form";
 import { List } from "./components/List";
-import type { People } from "./types/types";
+
 import "./App.css";
 
-const initialPeople: People[] = [
+const initialPeople = [
   {
     name: "Jan Kowalski",
     age: 30,
@@ -20,16 +20,19 @@ const initialPeople: People[] = [
   },
 ];
 
-export default function App() {
-  const [people, setPeople] = useState<People[]>(initialPeople);
-
-  const addPerson = (person: People) =>
-    setPeople((prevPeople) => [...prevPeople, person]);
+function App() {
+  const [people, setPeople] = useState(initialPeople);
 
   return (
     <div className="container">
-      <Form onAddPerson={addPerson} />
+      <Form
+        onAddPerson={(person) =>
+          setPeople((prevPeople) => [...prevPeople, person])
+        }
+      />
       <List data={people} />
     </div>
   );
 }
+
+export default App;
