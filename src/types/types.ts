@@ -5,3 +5,5 @@ export type People = {
   email: string;
   nip?: string;
 };
+
+export type ListProps = { data: People[] };
