@@ -3,6 +3,7 @@ import { Form } from "./components/Form";
 import { List } from "./components/List";
 
 import "./App.css";
+import type { People } from "./types/types";
 
 const initialPeople = [
   {
@@ -21,12 +22,12 @@ const initialPeople = [
 ];
 
 function App() {
-  const [people, setPeople] = useState(initialPeople);
+  const [people, setPeople] = useState<People[]>(initialPeople);
 
   return (
     <div className="container">
       <Form
-        onAddPerson={(person) =>
+        onAddPerson={(person: People) =>
           setPeople((prevPeople) => [...prevPeople, person])
         }
       />
