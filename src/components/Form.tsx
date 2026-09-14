@@ -10,6 +10,12 @@ export function Form({ onAddPerson }) {
   const [isInvoiceRequired, setIsInvoiceRequired] = useState(false);
   const [nip, setNip] = useState("");
 
+  // const handleNameInput
+
+  const hanndleInvoiceCheckToggle = () => {
+    setIsInvoiceRequired((prevState) => !prevState);
+  };
+
   return (
     <form autoComplete="off">
       <label htmlFor="name">Imię</label>
@@ -28,10 +34,16 @@ export function Form({ onAddPerson }) {
       <input id="email" type="email" />
 
       <label htmlFor="isInvoiceRequired">
-        <input id="isInvoiceRequired" type="checkbox" placeholder="Podaj NIP" />
+        <input
+          id="isInvoiceRequired"
+          type="checkbox"
+          placeholder="Podaj NIP"
+          checked={isInvoiceRequired}
+          onChange={hanndleInvoiceCheckToggle}
+        />
         Faktura VAT
       </label>
-      <input id="nip" />
+      {isInvoiceRequired && <input id="nip" />}
 
       <div className="footer">
         <button>Dodaj</button>

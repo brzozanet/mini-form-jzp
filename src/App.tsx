@@ -7,14 +7,16 @@ import type { People } from "./types/types";
 
 const initialPeople = [
   {
-    name: "Jan Kowalski",
+    name: "Jan",
+    surname: "Kowalski",
     age: 30,
     tel: "+48555666777",
     email: "jan.kowalski@gmail.com",
     nip: "0000000001",
   },
   {
-    name: "Janina Kowalska",
+    name: "Janina",
+    surname: "Kowalska",
     age: 25,
     tel: "+48333222111",
     email: "janina.kowalska@o2.com",
