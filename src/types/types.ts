@@ -20,3 +20,12 @@ export type FormState = {
   isInvoiceRequired: boolean;
   nip: string;
 };
+
+export type ErrorState = {
+  name: boolean;
+  surname: boolean;
+  age: boolean;
+  tel: boolean;
+  email: boolean;
+  nip: boolean;
+};
