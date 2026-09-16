@@ -26,6 +26,8 @@ const initialPeople = [
 export default function App() {
   const [people, setPeople] = useState<People[]>(initialPeople);
 
+  console.log(people);
+
   return (
     <div className="container">
       <Form

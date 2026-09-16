@@ -6,12 +6,13 @@ export function Form({ onAddPerson }: FormProps) {
   const [form, setForm] = useState<FormState>({
     name: "",
     surname: "",
-    age: "",
+    age: 0,
     tel: "",
     email: "",
     isInvoiceRequired: false,
     nip: "",
   });
+  const [error, setError] = useState(false);
 
   // NOTE: not DRY rule
   // const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,13 +37,30 @@ export function Form({ onAddPerson }: FormProps) {
       [event.target.id]:
         event.target.type === "checkbox"
           ? event.target.checked
-          : event.target.value,
+          : event.target.id === "age"
+            ? Number(event.target.value)
+            : event.target.value,
     }));
   };
 
+  console.log(form);
+
   const handleFormSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onAddPerson({ ...form, age: Number(form.age) });
+
+    if (
+      !form.name ||
+      !form.surname ||
+      form.age < 18 ||
+      !form.tel ||
+      !form.email
+    ) {
+      setError(true);
+      return;
+    }
+
+    onAddPerson(form);
+    setError(false);
   };
 
   return (
@@ -54,17 +72,20 @@ export function Form({ onAddPerson }: FormProps) {
         // onChange={(e) => console.log(e)}
         onChange={handleInputChange}
       />
+      {error && <div className="error">Imię jest wymagane</div>}
 
       <label htmlFor="surname">Nazwisko</label>
       <input id="surname" value={form.surname} onChange={handleInputChange} />
+      {error && <div className="error">Nazwisko jest wymagane</div>}
 
       <label htmlFor="age">Wiek</label>
       <input
         id="age"
         type="number"
-        value={form.age}
+        value={!form.age ? "" : form.age}
         onChange={handleInputChange}
       />
+      {error && <div className="error">Osoba musi być pełnoletnia (18+)</div>}
 
       <label htmlFor="tel">Telefon</label>
       <input
@@ -92,7 +113,9 @@ export function Form({ onAddPerson }: FormProps) {
         />
         Faktura VAT
       </label>
-      <input id="nip" value={form.nip} onChange={handleInputChange} />
+      {form.isInvoiceRequired && (
+        <input id="nip" value={form.nip} onChange={handleInputChange} />
+      )}
 
       <div className="footer">
         <button>Dodaj</button>
