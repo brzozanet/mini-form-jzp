@@ -23,7 +23,7 @@ const initialPeople = [
   },
 ];
 
-function App() {
+export default function App() {
   const [people, setPeople] = useState<People[]>(initialPeople);
 
   return (
@@ -37,5 +37,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
