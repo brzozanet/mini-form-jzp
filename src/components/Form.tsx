@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { FormState } from "../types/types";
+import type { FormProps, FormState } from "../types/types";
 import "./Form.css";
 
-export function Form({ onAddPerson }) {
+export function Form({ onAddPerson }: FormProps) {
   const [form, setForm] = useState<FormState>({
     name: "",
     surname: "",
@@ -42,7 +42,7 @@ export function Form({ onAddPerson }) {
 
   const handleFormSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onAddPerson(form);
+    onAddPerson({ ...form, age: Number(form.age) });
   };
 
   return (

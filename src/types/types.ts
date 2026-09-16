@@ -9,6 +9,8 @@ export type People = {
 
 export type ListProps = { data: People[] };
 
+export type FormProps = { onAddPerson: (param: People) => void };
+
 export type FormState = {
   name: string;
   surname: string;
