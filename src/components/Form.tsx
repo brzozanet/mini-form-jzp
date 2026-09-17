@@ -50,10 +50,12 @@ export function Form({ onAddPerson }: FormProps) {
     }));
   };
 
-  console.log(form);
+  // TODO:
+  // const validateFieldLength =
 
   const handleFormSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     onAddPerson(form);
   };
 
