@@ -2,24 +2,30 @@ import { useState } from "react";
 import type { ErrorState, FormProps, FormState } from "../types/types";
 import "./Form.css";
 
+const NAME_LENGTH = 2;
+const SURNAME_LENGTH = 2;
+const MIN_AGE = 18;
+
+const initialErrors = {
+  name: false,
+  surname: false,
+  age: false,
+  tel: false,
+  email: false,
+  nip: false,
+};
+
 export function Form({ onAddPerson }: FormProps) {
-  const [form, setForm] = useState<FormState>({
+  const [formData, setFormData] = useState<FormState>({
     name: "",
     surname: "",
-    age: 0,
+    age: "",
     tel: "",
     email: "",
     isInvoiceRequired: false,
     nip: "",
   });
-  const [errors, setErrors] = useState<ErrorState>({
-    name: false,
-    surname: false,
-    age: false,
-    tel: false,
-    email: false,
-    nip: false,
-  });
+  const [errors, setErrors] = useState<ErrorState>(initialErrors);
 
   // NOTE: not DRY rule
   // const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,24 +45,53 @@ export function Form({ onAddPerson }: FormProps) {
   // };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prevFormState) => ({
+    setFormData((prevFormState) => ({
       ...prevFormState,
       [event.target.id]:
         event.target.type === "checkbox"
           ? event.target.checked
-          : event.target.id === "age"
-            ? Number(event.target.value)
-            : event.target.value,
+          : event.target.value.trim(),
     }));
   };
 
-  // TODO:
-  // const validateFieldLength =
+  const validateFieldLength = (
+    fieldName: string,
+    fieldValue: string,
+    correctValue: number,
+  ) => {
+    if (fieldValue.length < correctValue || fieldValue.includes(".")) {
+      setErrors((prevErrorsState) => ({
+        ...prevErrorsState,
+        [fieldName]: true,
+      }));
+      throw new Error("Błąd podczas walidacji ⛔");
+    } else {
+      setErrors((prevErrorsState) => ({
+        ...prevErrorsState,
+        [fieldName]: false,
+      }));
+    }
+  };
+
+  const validateAge = (fieldValue: number, correctValue: number) => {
+    if (fieldValue < correctValue) {
+      setErrors((prevErrorsState) => ({ ...prevErrorsState, age: true }));
+      throw new Error("Błąd podczas walidacji ⛔");
+    } else {
+      setErrors((prevErrorsState) => ({ ...prevErrorsState, age: false }));
+    }
+  };
 
   const handleFormSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    onAddPerson(form);
+    const personToSave = { ...formData, age: Number(formData.age) };
+    validateFieldLength("name", personToSave.name, NAME_LENGTH);
+    validateFieldLength("surname", personToSave.surname, SURNAME_LENGTH);
+    validateAge(personToSave.age, MIN_AGE);
+
+    onAddPerson(personToSave);
+    setErrors(initialErrors);
   };
 
   return (
@@ -64,21 +99,33 @@ export function Form({ onAddPerson }: FormProps) {
       <label htmlFor="name">Imię</label>
       <input
         id="name"
-        value={form.name}
+        value={formData.name}
         // onChange={(e) => console.log(e)}
         onChange={handleInputChange}
       />
-      {errors.name && <div className="error">Imię jest wymagane</div>}
+      {errors.name && (
+        <div className="error">
+          Imię jest wymagane, minimum {NAME_LENGTH} znaki, bez kropki
+        </div>
+      )}
 
       <label htmlFor="surname">Nazwisko</label>
-      <input id="surname" value={form.surname} onChange={handleInputChange} />
-      {errors.surname && <div className="error">Nazwisko jest wymagane</div>}
+      <input
+        id="surname"
+        value={formData.surname}
+        onChange={handleInputChange}
+      />
+      {errors.surname && (
+        <div className="error">
+          Nazwisko jest wymagane, minimum {SURNAME_LENGTH} znaki, bez kropki
+        </div>
+      )}
 
       <label htmlFor="age">Wiek</label>
       <input
         id="age"
         type="number"
-        value={!form.age ? "" : form.age}
+        value={formData.age}
         onChange={handleInputChange}
       />
       {errors.age && (
@@ -89,7 +136,7 @@ export function Form({ onAddPerson }: FormProps) {
       <input
         id="tel"
         type="tel"
-        value={form.tel}
+        value={formData.tel}
         onChange={handleInputChange}
       />
 
@@ -97,7 +144,7 @@ export function Form({ onAddPerson }: FormProps) {
       <input
         id="email"
         type="email"
-        value={form.email}
+        value={formData.email}
         onChange={handleInputChange}
       />
 
@@ -106,13 +153,13 @@ export function Form({ onAddPerson }: FormProps) {
           id="isInvoiceRequired"
           type="checkbox"
           placeholder="Podaj NIP"
-          checked={form.isInvoiceRequired}
+          checked={formData.isInvoiceRequired}
           onChange={handleInputChange}
         />
         Faktura VAT
       </label>
-      {form.isInvoiceRequired && (
-        <input id="nip" value={form.nip} onChange={handleInputChange} />
+      {formData.isInvoiceRequired && (
+        <input id="nip" value={formData.nip} onChange={handleInputChange} />
       )}
 
       <div className="footer">

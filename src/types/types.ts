@@ -14,7 +14,7 @@ export type FormProps = { onAddPerson: (param: People) => void };
 export type FormState = {
   name: string;
   surname: string;
-  age: number;
+  age: string;
   tel: string;
   email: string;
   isInvoiceRequired: boolean;
